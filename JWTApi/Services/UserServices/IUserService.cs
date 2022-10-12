@@ -9,5 +9,7 @@ namespace JWTApi.Services.UserServices
         Task<List<User>> Register(UserDTO request);
 
         Task<ServiceResponse<string>> Login(UserDTO request);
+
+        ServiceResponse<object> getUser();    
     }
 }

@@ -29,7 +29,8 @@ namespace JWTApi.Services.SecurityServices
             //Making the claims
             List<Claim> claim = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,user.Username)
+                new Claim(ClaimTypes.Name,user.Username),
+                new Claim(ClaimTypes.Role,"Noob")
             };
 
             //Making the SecurityKey

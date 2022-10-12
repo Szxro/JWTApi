@@ -2,6 +2,7 @@
 using JWTApi.Services.SecurityServices;
 using JWTApi.Services.ServiceResponse;
 using JWTApi.Services.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -37,6 +38,12 @@ namespace JWTApi.Controllers
 
             return Ok(response);
        }
+
+        [HttpGet("getUsername"), Authorize]
+        public ActionResult<ServiceResponse<string>> getMe()
+        {
+            return Ok(_userService.getUser());
+        }
 
     }
 }
