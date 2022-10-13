@@ -6,10 +6,12 @@ namespace JWTApi.Services.UserServices
 {
     public interface IUserService
     {
-        Task<List<User>> Register(UserDTO request);
+        ServiceResponse<List<User>> Register(UserDTO request);
 
-        Task<ServiceResponse<string>> Login(UserDTO request);
+        ServiceResponse<string> Login(UserDTO request);
 
-        ServiceResponse<object> getUser();    
+        ServiceResponse<object> getUser();
+
+        ServiceResponse<string> refreshToken();
     }
 }

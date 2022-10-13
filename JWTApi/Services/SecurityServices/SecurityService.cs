@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using JWTApi.Services.ServiceResponse;
+using Microsoft.IdentityModel.Tokens;
 using Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,9 +10,11 @@ namespace JWTApi.Services.SecurityServices
     public class SecurityService : ISecurityServices
     {
         private readonly IConfiguration _configuration;
-        public SecurityService(IConfiguration configuration)
+        private readonly IHttpContextAccessor _http;
+        public SecurityService(IConfiguration configuration,IHttpContextAccessor http)
         {
             _configuration = configuration;
+            _http = http;   
         }
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -65,6 +68,30 @@ namespace JWTApi.Services.SecurityServices
                 This is just return true or false if the computedHash that is given is equal to the passwordHash
                  */
             }
+        }
+
+        public RefreshToken generateRefreshToken()
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Expired = DateTime.Now.AddDays(7),
+                Created = DateTime.Now
+            };
+
+            return refreshToken;
+        }
+
+        public CookieOptions SetRefreshToken(RefreshToken newrefreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = newrefreshToken.Expired
+            };
+            _http.HttpContext.Response.Cookies.Append("refreshToken", newrefreshToken.Token, cookieOptions);
+            
+            return cookieOptions;
         }
     }
 }

@@ -21,21 +21,16 @@ namespace JWTApi.Controllers
 
         [HttpPost("register")]
 
-        public async Task<ActionResult<User>> Register(UserDTO request) 
+        public ActionResult<ServiceResponse<List<User>>> Register(UserDTO request) 
         {
-            return Ok(await _userService.Register(request));
+            return Ok (_userService.Register(request));
         }
 
         [HttpPost("login")]
 
-        public async Task<ActionResult<ServiceResponse<string>>> Login(UserDTO request)
+        public ActionResult<ServiceResponse<string>> Login(UserDTO request)
         {
-            var response = await _userService.Login(request);
-            if (!response.Success) 
-            {
-                return BadRequest(response);
-            }
-
+            var response = _userService.Login(request);
             return Ok(response);
        }
 
@@ -45,5 +40,10 @@ namespace JWTApi.Controllers
             return Ok(_userService.getUser());
         }
 
+        [HttpPost("refreshToken"),Authorize]
+        public ActionResult<ServiceResponse<string>> RefreshToken()
+        {
+            return Ok( _userService.refreshToken());
+        }
     }
 }
